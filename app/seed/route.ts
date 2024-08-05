@@ -110,6 +110,10 @@ export async function GET() {
     return new Response(JSON.stringify({ message: 'Database seeded successfully' }), { status: 200 });
   } catch (error) {
     await client.sql`ROLLBACK`;
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    let errorMessage = 'Unknown error';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
